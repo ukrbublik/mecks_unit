@@ -25,8 +25,11 @@ defmodule MecksUnit.Case do
       attrs = if unquote(attributes), do:
         Enum.map(unquote(attributes), fn attr ->
           val = Module.get_attribute(__MODULE__, attr, :default)
-          if val == :default, do: nil, else:
-            {:@, [line: 0], [{attr, [line: 0], [val]}]}
+          if val == :default do
+            nil
+          else
+            {:@, [line: 0], [{attr, [line: 0], [ Macro.escape(val) ]}]}
+          end
         end)
         |> Enum.filter(&(&1 != nil)),
       else: []
